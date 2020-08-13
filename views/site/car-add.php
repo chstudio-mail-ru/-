@@ -1,0 +1,26 @@
+<?php
+
+/* @var $this yii\web\View */
+/* @var $add_form app\models\AddForm */
+
+$this->title = 'Webelement Car add';
+
+use yii\helpers\ArrayHelper;
+use yii\widgets\ActiveForm;
+
+$colors = \app\models\Color::getAll();
+
+$form = ActiveForm::begin([
+    'id'      => 'add_form',
+    'method'  => 'post',
+]);
+
+echo $form->field($add_form, 'mark')->textInput()->label('Марка');
+echo $form->field($add_form, 'model')->textInput()->label('Модель');
+echo $form->field($add_form, 'price')->textInput()->label('Цена');
+echo $form->field($add_form, 'bodytype')->textInput()->label('Тип кузова');
+$items_color = ArrayHelper::map($colors,'id','name');
+echo $form->field($add_form, 'colors')->dropDownList($items_color, ['multiple' => 'multiple'])->label('Цвета');
+echo $form->field($add_form, 'description')->textarea()->label('Описание');
+
+ActiveForm::end();
