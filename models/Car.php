@@ -70,7 +70,7 @@ class Car extends ActiveRecord
         $onPage = 5;
         $limit = [1, 50];
 
-        $query = self::find()->all();
+        $query = self::find()->with('colors')->all();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
@@ -85,12 +85,15 @@ class Car extends ActiveRecord
         return $dataProvider;
     }
 
-    public static function addRecord($mark_id, $model_id, $engine_id, $drive_id, $price = 0, $discount = 0)
+    public static function addRecord($mark_id, $model_id, $bodytype_id, $price, $photo, $description)
     {
         $obj = new self;
         $obj->mark_id = $mark_id;
         $obj->model_id = $model_id;
+        $obj->bodytype_id = $bodytype_id;
         $obj->price = $price;
+        $obj->photo = $photo;
+        $obj->description = $description;
         $obj->date_add = time();
         $obj->save();
 

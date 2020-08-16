@@ -64,6 +64,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+
+
         return $this->render('index');
     }
 
@@ -74,10 +76,16 @@ class SiteController extends Controller
      */
     public function actionCarAdd()
     {
-        $post = Yii::$app->request->post();
-        $form = new AddForm($post);
+        $form = new AddForm();
+        $result = '';
 
-        return $this->render('car-add', ['add_form' => $form]);
+        if (Yii::$app->request->isPost) {
+            $post = Yii::$app->request->post();
+            $form->load($post);
+            $result = $form->addCar();
+        }
+
+        return $this->render('car-add', ['add_form' => $form, 'result' => $result]);
     }
 
     /**

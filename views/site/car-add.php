@@ -5,6 +5,7 @@
 
 $this->title = 'Webelement Car add';
 
+use yii\bootstrap\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 
@@ -23,4 +24,8 @@ $items_color = ArrayHelper::map($colors,'id','name');
 echo $form->field($add_form, 'colors')->dropDownList($items_color, ['multiple' => 'multiple'])->label('Цвета');
 echo $form->field($add_form, 'description')->textarea()->label('Описание');
 
+echo Html::submitButton('Добавить');
+
 ActiveForm::end();
+
+echo $result;
