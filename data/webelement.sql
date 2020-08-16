@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.8.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Aug 14, 2020 at 12:37 AM
--- Server version: 10.1.38-MariaDB
--- PHP Version: 7.2.16
+-- Хост: 127.0.0.1
+-- Время создания: Авг 16 2020 г., 22:40
+-- Версия сервера: 10.1.32-MariaDB
+-- Версия PHP: 7.2.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,25 +19,32 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `webelement`
+-- База данных: `webelement`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bodytype`
+-- Структура таблицы `bodytype`
 --
 
 CREATE TABLE `bodytype` (
   `id` int(11) NOT NULL,
-  `name` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
   `date_add` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `bodytype`
+--
+
+INSERT INTO `bodytype` (`id`, `name`, `date_add`) VALUES
+(2, 'Хэтчбэк', 1597609891);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `car`
+-- Структура таблицы `car`
 --
 
 CREATE TABLE `car` (
@@ -46,15 +53,21 @@ CREATE TABLE `car` (
   `model_id` int(11) NOT NULL,
   `bodytype_id` int(11) NOT NULL,
   `price` int(11) NOT NULL,
-  `photo` varchar(100) NOT NULL,
   `description` text NOT NULL,
   `date_add` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `car`
+--
+
+INSERT INTO `car` (`id`, `mark_id`, `model_id`, `bodytype_id`, `price`, `description`, `date_add`) VALUES
+(11, 7, 10, 2, 3000000, 'В хорошем состоянии', 1597609891);
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `car_ref_color`
+-- Структура таблицы `car_ref_color`
 --
 
 CREATE TABLE `car_ref_color` (
@@ -63,10 +76,18 @@ CREATE TABLE `car_ref_color` (
   `color_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `car_ref_color`
+--
+
+INSERT INTO `car_ref_color` (`id`, `car_id`, `color_id`) VALUES
+(27, 11, 4),
+(28, 11, 10);
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `color`
+-- Структура таблицы `color`
 --
 
 CREATE TABLE `color` (
@@ -76,7 +97,7 @@ CREATE TABLE `color` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `color`
+-- Дамп данных таблицы `color`
 --
 
 INSERT INTO `color` (`id`, `name`, `date_add`) VALUES
@@ -94,7 +115,7 @@ INSERT INTO `color` (`id`, `name`, `date_add`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mark`
+-- Структура таблицы `mark`
 --
 
 CREATE TABLE `mark` (
@@ -104,17 +125,18 @@ CREATE TABLE `mark` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `mark`
+-- Дамп данных таблицы `mark`
 --
 
 INSERT INTO `mark` (`id`, `name`, `date_add`) VALUES
 (1, 'Lexus', 1597349110),
-(2, 'Toyota', 1597349110);
+(2, 'Toyota', 1597349110),
+(7, 'BMW', 1597609891);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `model`
+-- Структура таблицы `model`
 --
 
 CREATE TABLE `model` (
@@ -125,7 +147,7 @@ CREATE TABLE `model` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `model`
+-- Дамп данных таблицы `model`
 --
 
 INSERT INTO `model` (`id`, `mark_id`, `name`, `date_add`) VALUES
@@ -133,20 +155,21 @@ INSERT INTO `model` (`id`, `mark_id`, `name`, `date_add`) VALUES
 (2, 1, 'GX', 1597349110),
 (3, 2, 'Camry', 1597349162),
 (4, 2, 'Corolla', 1597349162),
-(5, 2, 'RAV4', 1597349162);
+(5, 2, 'RAV4', 1597349162),
+(10, 7, 'X5', 1597609891);
 
 --
--- Indexes for dumped tables
+-- Индексы сохранённых таблиц
 --
 
 --
--- Indexes for table `bodytype`
+-- Индексы таблицы `bodytype`
 --
 ALTER TABLE `bodytype`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `car`
+-- Индексы таблицы `car`
 --
 ALTER TABLE `car`
   ADD PRIMARY KEY (`id`),
@@ -156,7 +179,7 @@ ALTER TABLE `car`
   ADD KEY `bodytype_id` (`bodytype_id`);
 
 --
--- Indexes for table `car_ref_color`
+-- Индексы таблицы `car_ref_color`
 --
 ALTER TABLE `car_ref_color`
   ADD PRIMARY KEY (`id`),
@@ -164,63 +187,63 @@ ALTER TABLE `car_ref_color`
   ADD KEY `color_id` (`color_id`);
 
 --
--- Indexes for table `color`
+-- Индексы таблицы `color`
 --
 ALTER TABLE `color`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `mark`
+-- Индексы таблицы `mark`
 --
 ALTER TABLE `mark`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `model`
+-- Индексы таблицы `model`
 --
 ALTER TABLE `model`
   ADD PRIMARY KEY (`id`),
   ADD KEY `mark_id` (`mark_id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT для сохранённых таблиц
 --
 
 --
--- AUTO_INCREMENT for table `bodytype`
+-- AUTO_INCREMENT для таблицы `bodytype`
 --
 ALTER TABLE `bodytype`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `car`
+-- AUTO_INCREMENT для таблицы `car`
 --
 ALTER TABLE `car`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT for table `car_ref_color`
+-- AUTO_INCREMENT для таблицы `car_ref_color`
 --
 ALTER TABLE `car_ref_color`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
--- AUTO_INCREMENT for table `color`
+-- AUTO_INCREMENT для таблицы `color`
 --
 ALTER TABLE `color`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT for table `mark`
+-- AUTO_INCREMENT для таблицы `mark`
 --
 ALTER TABLE `mark`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `model`
+-- AUTO_INCREMENT для таблицы `model`
 --
 ALTER TABLE `model`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
