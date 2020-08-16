@@ -5,10 +5,14 @@ namespace app\controllers;
 use app\models\AddForm;
 use app\models\CarMark;
 use app\models\CarModel;
+use Imagine\Image\Box;
 use Yii;
 //use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
+use yii\web\UploadedFile;
+use yii\imagine\Image;
+
 //use yii\filters\VerbFilter;
 //use app\models\LoginForm;
 //use app\models\ContactForm;
@@ -64,8 +68,6 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-
-
         return $this->render('index');
     }
 
@@ -82,36 +84,39 @@ class SiteController extends Controller
         if (Yii::$app->request->isPost) {
             $post = Yii::$app->request->post();
             $form->load($post);
-            $result = $form->addCar();
+            $model = $form->addCar();
+            $photo = UploadedFile::getInstance($model, 'photo');
+            if ($photo && $photo->tempName) {
+                $model->photo = $photo;
+                if ($model->validate(['photo'])) {
+                    $dir = Yii::getAlias('images/');
+                    $fileName = $model->car_obj->id.'-photo.'.$model->photo->extension;
+                    $model->photo->saveAs($dir.$fileName);
+                    $model->photo = $fileName;
+                    $photo = Image::getImagine()->open($dir . $fileName);
+                    $photo->thumbnail(new Box(800, 800))->save($dir.$fileName, ['quality' => 90]);
+                    $this->createDirectory(Yii::getAlias('images/thumbs/'));
+                    Image::thumbnail($dir.$fileName, 200, 150)
+                        ->save(Yii::getAlias($dir .'thumbs/'. $fileName), ['quality' => 80]);
+                }
+            }
+            if ($model->car_obj->save()) {
+                $result = "Добавлено.";
+                $form = new AddForm();
+                return $this->render('car-add', ['add_form' => $form, 'result' => $result]);
+            }
         }
 
         return $this->render('car-add', ['add_form' => $form, 'result' => $result]);
     }
 
-    /**
-     * Inicilize catalog.
-     *
-     * @return string
-     */
-    /*public function actionCatalogInit()
+    public function createDirectory($path)
     {
-        $marks = ['Lexus', 'Toyota'];
-        $models = ['Lexus' => ['ES', 'GX'], 'Toyota' => ['Camry', 'Corolla', 'RAV4']];
-        $log = "";
-
-        foreach ($marks as $mark_name) {
-            $mark_obj = CarMark::addRecord($mark_name);
-            $log .= 'Добавлен CarMark ID='.$mark_obj->id.' '.$mark_obj->name.'<br />';
-            if ($mark_obj && isset($models[$mark_name])) {
-                foreach ($models[$mark_name] as $model_name) {
-                    $model_obj = CarModel::addRecord($model_name, $mark_obj->id);
-                    $log .= 'Добавлен CarModel ID='.$model_obj->id.' '.$mark_name.' '.$model_obj->name.'<br />';
-                }
-            }
+        //$filename = "/folder/{$dirname}/";
+        if (!file_exists($path)) {
+            mkdir($path, 0775, true);
         }
-
-        return $this->render('catalog-init', ['log' => $log]);
-    }*/
+    }
 
     /**
      * Login action.

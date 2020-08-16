@@ -39,7 +39,6 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Car add', 'url' => ['/car-add']],
-            ['label' => 'Catalog init', 'url' => ['/catalog-init']],
             //['label' => 'Home', 'url' => ['/site/index']],
             //['label' => 'About', 'url' => ['/site/about']],
             //['label' => 'Contact', 'url' => ['/site/contact']],

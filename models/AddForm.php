@@ -16,13 +16,16 @@ class AddForm extends Model
     public $price;
     public $colors;
     public $bodytype;
+    public $photo;
     public $description;
+    public $car_obj;
 
     public function rules()
     {
         return [
             [['mark', 'model', 'bodytype', 'description'], 'string'],
             [['price'], 'integer'],
+            [['photo'], 'file', 'extensions' => 'png, jpg'],
             ['colors', 'each', 'rule' => ['integer']],
         ];
     }
@@ -45,12 +48,11 @@ class AddForm extends Model
             $bodytype_id = ($bodytype_obj)? $bodytype_obj->id : 0;
         }
         $colors_ids_arr = $this->colors;
-
-        $car_obj = Car::addRecord($mark_id, $model_id, $bodytype_id, $this->price, '', $this->description);
+        $this->car_obj = Car::addRecord($mark_id, $model_id, $bodytype_id, $this->price, '', $this->description);
         foreach ($colors_ids_arr as $color_id) {
-            CarRefColor::addRecord($car_obj->id, $color_id);
+            CarRefColor::addRecord($this->car_obj->id, $color_id);
         }
 
-        return 'Добавлено';
+        return $this;
     }
 }
