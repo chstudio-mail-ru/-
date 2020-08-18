@@ -3,12 +3,14 @@
 namespace app\controllers;
 
 use app\models\AddForm;
+use app\models\Car;
 use app\models\CarMark;
 use app\models\CarModel;
 use Imagine\Image\Box;
 use Yii;
 //use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\UploadedFile;
 use yii\imagine\Image;
@@ -68,7 +70,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $carsDataProvider = Car::getCarsDataProvider();
+
+        return $this->render('index', [
+            'dp' => $carsDataProvider,
+        ]);
     }
 
     /**
@@ -94,14 +100,14 @@ class SiteController extends Controller
                     $model->photo->saveAs($dir.$fileName);
                     $model->photo = $fileName;
                     $photo = Image::getImagine()->open($dir . $fileName);
-                    $photo->thumbnail(new Box(800, 800))->save($dir.$fileName, ['quality' => 90]);
+                    $photo->thumbnail(new Box(1000, 800))->save($dir.$fileName, ['quality' => 90]);
                     $this->createDirectory(Yii::getAlias('images/thumbs/'));
                     Image::thumbnail($dir.$fileName, 200, 150)
                         ->save(Yii::getAlias($dir .'thumbs/'. $fileName), ['quality' => 80]);
                 }
             }
             if ($model->car_obj->save()) {
-                $result = "Добавлено.";
+                $result = 'Аввтомобиль '.$model->car_obj->mark->name.' '.$model->car_obj->model->name.' добавлен.';
                 $form = new AddForm();
                 return $this->render('car-add', ['add_form' => $form, 'result' => $result]);
             }
@@ -110,7 +116,33 @@ class SiteController extends Controller
         return $this->render('car-add', ['add_form' => $form, 'result' => $result]);
     }
 
-    public function createDirectory($path)
+    /**
+     * Displays car page.
+     *
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionCar()
+    {
+        $get = Yii::$app->request->get();
+
+        if (!isset($get['id']) || !is_numeric($get['id'])) {
+            throw new NotFoundHttpException('404 Not found');
+        }
+
+        $model = Car::getCarById($get['id']);
+
+        if ($model) {
+            return $this->render('car-page', ['model' => $model]);
+        } else {
+            throw new NotFoundHttpException('404 Not found');
+        }
+    }
+
+    /**
+     * Create Directory.
+     */
+    private function createDirectory($path)
     {
         //$filename = "/folder/{$dirname}/";
         if (!file_exists($path)) {

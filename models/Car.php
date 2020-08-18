@@ -14,7 +14,6 @@ use yii\db\ActiveRecord;
  * @property integer $model_id
  * @property integer bodytype_id
  * @property integer price
- * @property string photo
  * @property string description
  * @property integer date_add
  */
@@ -30,7 +29,7 @@ class Car extends ActiveRecord
         return [
             [['mark_id', 'model_id', 'bodytype_id'], 'required'],
             [['mark_id', 'model_id', 'bodytype_id', 'price', 'date_add'], 'integer'],
-            [['photo', 'description'], 'string'],
+            [['description'], 'string'],
         ];
     }
 
@@ -42,7 +41,6 @@ class Car extends ActiveRecord
             'model_id' => 'Model ID',
             'bodytype_id' => 'Bodytype ID',
             'price' => 'Price',
-            'photo' => 'Photo',
             'description' => 'Description',
             'date_add' => 'date add',
         ];
@@ -58,6 +56,14 @@ class Car extends ActiveRecord
         return $this->hasOne(CarMark::className(), ['id' => 'mark_id']);
     }
 
+    public function getModel() {
+        return $this->hasOne(CarModel::className(), ['id' => 'model_id']);
+    }
+
+    public function getBodytype() {
+        return $this->hasOne(Bodytype::className(), ['id' => 'bodytype_id']);
+    }
+
     public function getColors()
     {
         return $this->hasMany(Color::classname(), ['id' => 'color_id'])
@@ -70,7 +76,7 @@ class Car extends ActiveRecord
         $onPage = 5;
         $limit = [1, 50];
 
-        $query = self::find()->with('colors')->all();
+        $query = self::find()->with('colors');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
@@ -92,7 +98,6 @@ class Car extends ActiveRecord
         $obj->model_id = $model_id;
         $obj->bodytype_id = $bodytype_id;
         $obj->price = $price;
-        $obj->photo = $photo;
         $obj->description = $description;
         $obj->date_add = time();
         $obj->save();

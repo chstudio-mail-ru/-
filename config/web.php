@@ -51,9 +51,15 @@ $config = [
                 '/' => 'site/index',
                 'catalog-init/?' => 'site/catalog-init',
                 'car-add/?' => 'site/car-add',
-                'car/<auto_id:\d+>/?' => 'site/car',
+                'car/<id:\d+>/?' => 'site/car',
             ],
         ],
+        /*'formatter' => [
+            'dateFormat' => 'dd.MM.yyyy',
+            'decimalSeparator' => '.',
+            'thousandSeparator' => ' ',
+            'currencyCode' => 'RUR',
+        ],*/
     ],
     'params' => $params,
 ];

@@ -24,10 +24,17 @@ class AddForm extends Model
     {
         return [
             [['mark', 'model', 'bodytype', 'description'], 'string'],
-            [['price'], 'integer'],
-            [['photo'], 'file', 'extensions' => 'png, jpg'],
+            [['price'], 'integer', 'message' => 'Цена должна быть целым числом'],
+            [['photo'], 'file', 'extensions' => 'jpg, jpeg, png', 'wrongExtension' => 'Доступны форматы JPG, JPEG, PNG'], //также изменить в методе self::getPhotoExtensions()
             ['colors', 'each', 'rule' => ['integer']],
+            [['mark', 'model', 'price'], 'required', 'message' => 'Ведите значение'],
+            [['colors'], 'required', 'message' => 'Выберите хотя бы 1 цвет'],
         ];
+    }
+
+    public static function getPhotoExtensions()
+    {
+        return ['jpg', 'jpeg', 'png'];
     }
 
     public function addCar()
