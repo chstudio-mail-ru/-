@@ -25,9 +25,9 @@ class AddForm extends Model
         return [
             [['mark', 'model', 'bodytype', 'description'], 'string'],
             [['price'], 'integer', 'message' => 'Цена должна быть целым числом'],
-            [['photo'], 'file', 'extensions' => 'jpg, jpeg, png', 'wrongExtension' => 'Доступны форматы JPG, JPEG, PNG'], //также изменить в методе self::getPhotoExtensions()
+            [['photo'], 'file', 'extensions' => 'jpg, jpeg, png', 'wrongExtension' => 'Доступные форматы JPG, JPEG, PNG'], //также изменить в методе self::getPhotoExtensions()
             ['colors', 'each', 'rule' => ['integer']],
-            [['mark', 'model', 'price'], 'required', 'message' => 'Ведите значение'],
+            [['mark', 'model', 'price'], 'required', 'message' => 'Введите значение'],
             [['colors'], 'required', 'message' => 'Выберите хотя бы 1 цвет'],
         ];
     }
