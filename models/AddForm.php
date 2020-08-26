@@ -22,10 +22,49 @@ class AddForm extends Model
 
     public function rules()
     {
+        $mark_validate = new CarMark;
+        $mark_rules = $mark_validate->rules();
+        $mark_name_max = 0;
+        foreach ($mark_rules as $rule) {
+            if (array_key_exists('max', $rule) && ($rule[0] == 'name' || in_array('name', $rule[0]))) {
+                $mark_name_max = $rule['max'];
+                break;
+            }
+        }
+        $model_validate = new CarModel;
+        $model_rules = $model_validate->rules();
+        $model_name_max = 0;
+        foreach ($model_rules as $rule) {
+            if (array_key_exists('max', $rule) && ($rule[0] == 'name' || in_array('name', $rule[0]))) {
+                $model_name_max = $rule['max'];
+                break;
+            }
+        }
+        $body_validate = new Bodytype;
+        $body_rules = $body_validate->rules();
+        $body_name_max = 0;
+        foreach ($body_rules as $rule) {
+            if (array_key_exists('max', $rule) && ($rule[0] == 'name' || in_array('name', $rule[0]))) {
+                $body_name_max = $rule['max'];
+                break;
+            }
+        }
+
+        $extensions = self::getPhotoExtensions();
+        $extensions_names = '';
+        foreach ($extensions as $extension_name) {
+            $extensions_names .= $extension_name.', ';
+        }
+        $extensions_str = preg_replace("/,\s$/", '', $extensions_names);
+        $extensions_names = mb_strtoupper($extensions_str);
+
         return [
             [['mark', 'model', 'bodytype', 'description'], 'string'],
+            [['mark'], 'string', 'max' => $mark_name_max, 'tooLong' => 'Длина названия марки автомобиля не может превышать '.$mark_name_max.' символов!'],
+            [['model'], 'string', 'max' => $model_name_max, 'tooLong' => 'Длина названия модели автомобиля не может превышать '.$mark_name_max.' символов!'],
+            [['bodytype'], 'string', 'max' => $body_name_max, 'tooLong' => 'Длина названия типа кузова автомобиля не может превышать '.$mark_name_max.' символов!'],
             [['price'], 'integer', 'message' => 'Цена должна быть целым числом'],
-            [['photo'], 'file', 'extensions' => 'jpg, jpeg, png', 'wrongExtension' => 'Доступные форматы JPG, JPEG, PNG'], //также изменить в методе self::getPhotoExtensions()
+            [['photo'], 'file', 'extensions' => $extensions_str, 'wrongExtension' => 'Доступные форматы '.$extensions_names],
             ['colors', 'each', 'rule' => ['integer']],
             [['mark', 'model', 'price'], 'required', 'message' => 'Введите значение'],
             [['colors'], 'required', 'message' => 'Выберите хотя бы 1 цвет'],
