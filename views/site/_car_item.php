@@ -10,7 +10,7 @@ $formatter->setSymbol(NumberFormatter::CURRENCY_SYMBOL, 'р.');
 $extensions = \app\models\AddForm::getPhotoExtensions();
 $photo = Html::img('/images/thumbs/nophoto.jpg');
 foreach ($extensions as $ext) {
-    if (file_exists(Yii::getAlias('@webroot', 'images/thumbs/'.$model->id.'-photo.'.$ext))) {
+    if (file_exists(Yii::getAlias('@webroot/images/thumbs/'.$model->id.'-photo.'.$ext))) {
         $photo = Html::img('/images/thumbs/'.$model->id.'-photo.'.$ext);
         break;
     }

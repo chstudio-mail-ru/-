@@ -55,9 +55,19 @@ class AddForm extends Model
             $bodytype_id = ($bodytype_obj)? $bodytype_obj->id : 0;
         }
         $colors_ids_arr = $this->colors;
-        $this->car_obj = Car::addRecord($mark_id, $model_id, $bodytype_id, $this->price, '', $this->description);
-        foreach ($colors_ids_arr as $color_id) {
-            CarRefColor::addRecord($this->car_obj->id, $color_id);
+        if ($mark_id > 0 && $model_id > 0 && $bodytype_id > 0) {
+            $this->car_obj = Car::addRecord($mark_id, $model_id, $bodytype_id, $this->price, $this->description);
+            if ($this->car_obj->id > 0) {
+                foreach ($colors_ids_arr as $color_id) {
+                    CarRefColor::addRecord($this->car_obj->id, $color_id);
+                }
+            } else {
+                //произошла ошибка с добавлением автомобиля
+                return null;
+            }
+        } else {
+            //произошла ошибка с добавлением
+            return null;
         }
 
         return $this;

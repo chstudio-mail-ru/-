@@ -28,7 +28,7 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => ['logout'],
                 'rules' => [
                     [
@@ -39,7 +39,7 @@ class SiteController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'logout' => ['post'],
                 ],
@@ -91,25 +91,29 @@ class SiteController extends Controller
             $post = Yii::$app->request->post();
             $form->load($post);
             $model = $form->addCar();
-            $photo = UploadedFile::getInstance($model, 'photo');
-            if ($photo && $photo->tempName) {
-                $model->photo = $photo;
-                if ($model->validate(['photo'])) {
-                    $dir = Yii::getAlias('images/');
-                    $fileName = $model->car_obj->id.'-photo.'.$model->photo->extension;
-                    $model->photo->saveAs($dir.$fileName);
-                    $model->photo = $fileName;
-                    $photo = Image::getImagine()->open($dir . $fileName);
-                    $photo->thumbnail(new Box(1000, 800))->save($dir.$fileName, ['quality' => 90]);
-                    $this->createDirectory(Yii::getAlias('images/thumbs/'));
-                    Image::thumbnail($dir.$fileName, 200, 150)
-                        ->save(Yii::getAlias($dir .'thumbs/'. $fileName), ['quality' => 80]);
+            if (!is_null($model)) {
+                $photo = UploadedFile::getInstance($model, 'photo');
+                if ($photo && $photo->tempName) {
+                    $model->photo = $photo;
+                    if ($model->validate(['photo'])) {
+                        $dir = Yii::getAlias('@webroot/images/');
+                        $fileName = $model->car_obj->id.'-photo.'.$model->photo->extension;
+                        $model->photo->saveAs($dir.$fileName);
+                        $model->photo = $fileName;
+                        $photo = Image::getImagine()->open($dir . $fileName);
+                        $photo->thumbnail(new Box(1000, 800))->save($dir.$fileName, ['quality' => 90]);
+                        $this->createDirectory(Yii::getAlias('@webroot/images/thumbs/'));
+                        Image::thumbnail($dir.$fileName, 200, 150)
+                            ->save(Yii::getAlias($dir .'thumbs/'. $fileName), ['quality' => 80]);
+                    }
                 }
-            }
-            if ($model->car_obj->save()) {
-                $result = 'Аввтомобиль '.$model->car_obj->mark->name.' '.$model->car_obj->model->name.' добавлен.';
-                $form = new AddForm();
-                return $this->render('car-add', ['add_form' => $form, 'result' => $result]);
+                if ($model->car_obj->save()) {
+                    $result = 'Аввтомобиль '.$model->car_obj->mark->name.' '.$model->car_obj->model->name.' добавлен.';
+                    $form = new AddForm();
+                    return $this->render('car-add', ['add_form' => $form, 'result' => $result]);
+                }
+            } else {
+                $result = 'Произошла ошибка!';
             }
         }
 

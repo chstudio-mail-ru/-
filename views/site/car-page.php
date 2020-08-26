@@ -10,7 +10,7 @@ $this->title = $model->mark->name.' '.$model->model->name;
 $extensions = \app\models\AddForm::getPhotoExtensions();
 $photo = Html::img('/images/nophoto.jpg');
 foreach ($extensions as $ext) {
-    if (file_exists(Yii::getAlias('@webroot', 'images/'.$model->id.'-photo.'.$ext))) {
+    if (file_exists(Yii::getAlias('@webroot/images/'.$model->id.'-photo.'.$ext))) {
         $photo = Html::img('/images/'.$model->id.'-photo.'.$ext);
         break;
     }

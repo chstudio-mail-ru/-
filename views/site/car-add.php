@@ -23,7 +23,7 @@ echo $form->field($add_form, 'bodytype')->textInput()->label('Тип кузов�
 $items_color = ArrayHelper::map($colors,'id','name');
 echo $form->field($add_form, 'colors')->dropDownList($items_color, ['multiple' => 'multiple'])->label('Цвета *');
 
-if (isset($add_form->photo) && file_exists(Yii::getAlias('@webroot', $add_form->photo))) {
+if (isset($add_form->photo) && file_exists(Yii::getAlias('@webroot/images/'.$add_form->photo))) {
     echo Html::img('/images/'.$add_form->photo);
 }
 echo $form->field($add_form, 'photo')->fileInput()->label('Фото');
