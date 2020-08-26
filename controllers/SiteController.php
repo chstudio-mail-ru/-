@@ -111,6 +111,8 @@ class SiteController extends Controller
                     $result = 'Аввтомобиль '.$model->car_obj->mark->name.' '.$model->car_obj->model->name.' добавлен.';
                     $form = new AddForm();
                     return $this->render('car-add', ['add_form' => $form, 'result' => $result]);
+                } else {
+                    $result = 'Произошла ошибка!';
                 }
             } else {
                 $result = 'Произошла ошибка!';
