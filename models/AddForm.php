@@ -61,8 +61,8 @@ class AddForm extends Model
         return [
             [['mark', 'model', 'bodytype', 'description'], 'string'],
             [['mark'], 'string', 'max' => $mark_name_max, 'tooLong' => 'Длина названия марки автомобиля не может превышать '.$mark_name_max.' символов!'],
-            [['model'], 'string', 'max' => $model_name_max, 'tooLong' => 'Длина названия модели автомобиля не может превышать '.$mark_name_max.' символов!'],
-            [['bodytype'], 'string', 'max' => $body_name_max, 'tooLong' => 'Длина названия типа кузова автомобиля не может превышать '.$mark_name_max.' символов!'],
+            [['model'], 'string', 'max' => $model_name_max, 'tooLong' => 'Длина названия модели автомобиля не может превышать '.$model_name_max.' символов!'],
+            [['bodytype'], 'string', 'max' => $body_name_max, 'tooLong' => 'Длина названия типа кузова автомобиля не может превышать '.$body_name_max.' символов!'],
             [['price'], 'integer', 'message' => 'Цена должна быть целым числом'],
             [['photo'], 'file', 'extensions' => $extensions_str, 'wrongExtension' => 'Доступные форматы '.$extensions_names],
             ['colors', 'each', 'rule' => ['integer']],
